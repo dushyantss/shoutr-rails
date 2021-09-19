@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PhotoShout < ApplicationRecord
   has_one_attached :image
 
@@ -12,14 +14,12 @@ class PhotoShout < ApplicationRecord
   private
 
   def correct_image_mime_type
-    if image.attached? && !image.content_type.in?(%w(image/jpeg image/png image/gif))
+    if image.attached? && !image.content_type.in?(%w[image/jpeg image/png image/gif])
       errors.add(:image, 'Must be an image')
     end
   end
 
   def image_size_within_range
-    if image.attached? && image.byte_size > 10.megabytes
-      errors.add(:image, 'Must be less than 10 MB')
-    end
+    errors.add(:image, 'Must be less than 10 MB') if image.attached? && image.byte_size > 10.megabytes
   end
 end
